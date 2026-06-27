@@ -1,0 +1,2551 @@
+<div id="planposts-app">
+  <style>
+    #planposts-app {
+      font-family: Inter, Arial, sans-serif;
+      background: #f6f8fc;
+      color: #111827;
+      min-height: 100vh;
+    }
+    #planposts-app * {
+      box-sizing: border-box;
+    }
+    .pp-hidden {
+      display: none !important;
+    }
+    .pp-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(47, 128, 255, 0.28),
+          transparent 35%
+        ),
+        linear-gradient(135deg, #070a10, #0b1220);
+    }
+    .pp-login-card {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border-radius: 30px;
+      padding: 34px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+    }
+    .pp-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .pp-logo-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #2f80ff, #56ccf2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+    .pp-login-card h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 900;
+    }
+    .pp-login-card p {
+      color: #64748b;
+    }
+    .pp-input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #dbe3ef;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #fff;
+      color: #111827;
+    }
+    .pp-btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      background: #2f80ff;
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 15px;
+    }
+    .pp-btn.secondary {
+      background: #fff;
+      color: #2f80ff;
+      border: 1px solid #cfe0ff;
+    }
+    .pp-btn.full {
+      width: 100%;
+    }
+    .pp-btn.small {
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: 13px;
+    }
+    .pp-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .pp-error {
+      margin-top: 12px;
+      color: #dc2626;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .pp-app {
+      display: flex;
+      min-height: 100vh;
+    }
+    .pp-sidebar {
+      width: 285px;
+      background: #0c1220;
+      color: #fff;
+      padding: 24px;
+      flex-shrink: 0;
+    }
+    .pp-side-title {
+      font-size: 23px;
+      font-weight: 900;
+    }
+    .pp-side-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .pp-user-box {
+      margin: 24px 0;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 16px;
+    }
+    .pp-user-name {
+      font-weight: 900;
+    }
+    .pp-user-role {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 4px;
+    }
+    .pp-nav button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.66);
+      padding: 14px 16px;
+      border-radius: 16px;
+      text-align: left;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 8px;
+      font-family: inherit;
+      font-size: 15px;
+    }
+    .pp-nav button.active,
+    .pp-nav button:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .pp-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .pp-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246, 248, 252, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+      padding: 22px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pp-header h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .pp-header p {
+      margin: 4px 0 0;
+      color: #64748b;
+    }
+    .pp-container {
+      max-width: 1280px;
+      margin: auto;
+      padding: 32px;
+    }
+    .pp-grid {
+      display: grid;
+      gap: 22px;
+    }
+    .pp-grid-2 {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .pp-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .pp-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .pp-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+    .pp-hero {
+      background: linear-gradient(135deg, #2f80ff, #5b5ff5);
+      color: #fff;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(47, 128, 255, 0.25);
+    }
+    .pp-hero h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+    .pp-hero p {
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .pp-stat {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .pp-stat span {
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .pp-stat strong {
+      display: block;
+      font-size: 30px;
+      margin-top: 5px;
+    }
+    .pp-progress {
+      height: 16px;
+      background: #e8eef7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .pp-progress-fill {
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(135deg, #2f80ff, #56ccf2);
+      transition: width 0.35s ease;
+    }
+    .pp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .pp-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pp-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: #eef5ff;
+      color: #2f80ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .pp-row h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .pp-row p {
+      margin: 4px 0 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .pp-pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      background: #eef5ff;
+      color: #2f80ff;
+    }
+    .green {
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+    }
+    .yellow {
+      background: #fffbeb !important;
+      color: #d97706 !important;
+    }
+    .red {
+      background: #fef2f2 !important;
+      color: #dc2626 !important;
+    }
+    .pp-price {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 8px 0;
+    }
+    .pp-chart {
+      height: 220px;
+      display: flex;
+      align-items: end;
+      gap: 14px;
+      padding-top: 20px;
+    }
+    .pp-bar-wrap {
+      flex: 1;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .pp-bar {
+      height: 160px;
+      background: #edf2f7;
+      border-radius: 16px 16px 6px 6px;
+      display: flex;
+      align-items: end;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .pp-bar-fill {
+      width: 100%;
+      background: linear-gradient(135deg, #2f80ff, #56ccf2);
+      transition: height 0.35s ease;
+    }
+    .pp-drive-wrap {
+      width: 100%;
+      height: 70vh;
+      border: 1px solid #dbe3ef;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .pp-drive {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .pp-folder-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .pp-folder-img {
+      height: 150px;
+      background: linear-gradient(135deg, #0c1220, #2f80ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 42px;
+    }
+    .pp-folder-body {
+      padding: 18px;
+    }
+    .pp-folder-body h3 {
+      margin: 0 0 6px;
+    }
+    .pp-folder-body p {
+      color: #64748b;
+      font-size: 14px;
+      min-height: 42px;
+    }
+    .pp-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(7, 10, 16, 0.78);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .pp-modal-card {
+      width: 100%;
+      max-width: 1100px;
+      height: 86vh;
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+    }
+    .pp-modal-header {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .pp-modal-title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .pp-modal-frame {
+      width: 100%;
+      flex: 1;
+      border: 0;
+    }
+    .pp-modal-form-card {
+      width: 100%;
+      max-width: 520px;
+      background: #fff;
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+      max-height: 92vh;
+      overflow: auto;
+    }
+    .pp-modal-form-card h2 {
+      margin: 0 0 4px;
+    }
+    .pp-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+      margin: 0 0 6px;
+    }
+    .pp-day {
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 18px;
+      margin-bottom: 12px;
+    }
+    .pp-day-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .pp-day-head strong {
+      font-size: 15px;
+    }
+    .pp-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pp-chip {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid #dbe3ef;
+      background: #fff;
+      color: #64748b;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .pp-chip.on {
+      background: #2f80ff;
+      border-color: #2f80ff;
+      color: #fff;
+    }
+    .pp-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: #0c1220;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+    .pp-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+    }
+    .pp-shoot-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .pp-shoot-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 220px;
+      flex: 1;
+    }
+    .pp-shoot-date {
+      width: 62px;
+      height: 62px;
+      border-radius: 16px;
+      background: #eef5ff;
+      color: #2f80ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .pp-shoot-date .d {
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .pp-shoot-date .m {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .pp-cal-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .pp-empty {
+      border: 2px dashed #dbe3ef;
+      border-radius: 22px;
+      background: #f8fafc;
+      padding: 28px;
+      text-align: center;
+      color: #64748b;
+    }
+    .pp-empty strong {
+      display: block;
+      color: #111827;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .pp-mobile-nav {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .pp-app {
+        display: block;
+      }
+      .pp-sidebar {
+        display: none;
+      }
+      .pp-header {
+        padding: 16px;
+      }
+      .pp-header h2 {
+        font-size: 22px;
+      }
+      .pp-header .pp-btn {
+        display: none;
+      }
+      .pp-container {
+        padding: 16px 16px 98px;
+      }
+      .pp-grid-2,
+      .pp-grid-3,
+      .pp-grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .pp-card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+      .pp-hero {
+        padding: 24px;
+      }
+      .pp-hero h1 {
+        font-size: 28px;
+      }
+      .pp-row {
+        display: block;
+      }
+      .pp-left {
+        margin-bottom: 14px;
+      }
+      .pp-shoot-row {
+        display: block;
+      }
+      .pp-shoot-meta {
+        margin-bottom: 12px;
+      }
+      .pp-drive-wrap {
+        height: 68vh;
+      }
+      .pp-mobile-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-around;
+        gap: 4px;
+        z-index: 99;
+        padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+        box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.08);
+        overflow-x: auto;
+      }
+      .pp-mobile-nav button {
+        min-width: 66px;
+        flex: 1;
+        background: #fff;
+        border: 0;
+        padding: 8px 4px;
+        font-size: 11px;
+        font-weight: 900;
+        color: #94a3b8;
+        border-radius: 16px;
+        font-family: inherit;
+      }
+      .pp-mobile-nav button.active {
+        color: #4f46e5;
+        background: #eef2ff;
+      }
+      .pp-mobile-icon {
+        display: block;
+        font-size: 22px;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .pp-modal {
+        padding: 10px;
+      }
+      .pp-modal-card {
+        height: 92vh;
+        border-radius: 20px;
+      }
+    }
+  </style>
+
+  <div id="ppLogin" class="pp-login">
+    <div class="pp-login-card">
+      <div class="pp-logo">
+        <div class="pp-logo-icon">P</div>
+        <div>
+          <h1>Plan Posts</h1>
+          <p style="margin: 2px 0 0">
+            Content ops, posting reminders, leads, and team accountability.
+          </p>
+        </div>
+      </div>
+      <input id="ppUsername" class="pp-input" placeholder="Username" />
+      <input
+        id="ppPassword"
+        class="pp-input"
+        placeholder="Password"
+        type="password"
+      />
+      <button class="pp-btn full" onclick="ppLogin()">Login</button>
+      <div id="ppError" class="pp-error pp-hidden">
+        Wrong username or password.
+      </div>
+      <div
+        style="
+          margin-top: 22px;
+          background: #f8fafc;
+          border-radius: 18px;
+          padding: 16px;
+          font-size: 13px;
+          color: #64748b;
+        "
+      >
+        <strong>Demo logins:</strong><br />Owner: owner1 / owner123<br />Content
+        strategy: marketing1 / marketing123<br />Videographer: uploader1 /
+        uploader123
+      </div>
+    </div>
+  </div>
+
+  <div id="ppApp" class="pp-app pp-hidden">
+    <aside class="pp-sidebar">
+      <div class="pp-logo">
+        <div class="pp-logo-icon">P</div>
+        <div>
+          <div class="pp-side-title">Plan Posts</div>
+          <div class="pp-side-sub">Web Portal</div>
+        </div>
+      </div>
+      <div class="pp-user-box">
+        <div id="ppUserName" class="pp-user-name">User</div>
+        <div id="ppUserRole" class="pp-user-role">Role</div>
+      </div>
+      <div class="pp-nav" id="ppNav"></div>
+      <button
+        class="pp-btn secondary full"
+        onclick="ppLogout()"
+        style="margin-top: 20px"
+      >
+        Logout
+      </button>
+    </aside>
+
+    <main class="pp-main">
+      <header class="pp-header">
+        <div>
+          <h2 id="ppPageTitle">Dashboard</h2>
+          <p>Plan it. Post it. Prove it.</p>
+        </div>
+        <button class="pp-btn secondary" onclick="ppLogout()">Logout</button>
+      </header>
+      <div class="pp-container">
+        <section id="owner-dashboard" class="pp-screen">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-grid">
+              <div class="pp-hero">
+                <h1>Business Owner Dashboard</h1>
+                <p>
+                  Track your shoots, posting reminders, leads, and finished
+                  content in one place.
+                </p>
+              </div>
+              <div class="pp-card">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <div>
+                    <h2 style="margin: 0">Need strategy help?</h2>
+                    <p style="color: #64748b; margin: 6px 0 0">
+                      Book time with the content strategy team.
+                    </p>
+                  </div>
+                  <button class="pp-btn" onclick="ppOpenConsult()">
+                    Schedule a consultation
+                  </button>
+                </div>
+                <div id="ppOwnerConsults" style="margin-top: 16px"></div>
+              </div>
+              <div class="pp-card">
+                <h2 style="margin-top: 0">Videographer Sessions</h2>
+                <p style="color: #64748b">
+                  You have booked <strong id="ppQuotaUsed">0</strong> out of
+                  <strong>4</strong> monthly content sessions.
+                </p>
+                <div class="pp-progress">
+                  <div
+                    id="ppQuotaFill"
+                    class="pp-progress-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+                <p>
+                  <strong id="ppQuotaUsedLine">0 sessions used</strong> ·
+                  <strong id="ppQuotaLeftLine">4 sessions remaining</strong>
+                </p>
+                <button class="pp-btn" onclick="ppShow('owner-schedule')">
+                  Book a session
+                </button>
+              </div>
+            </div>
+            <div class="pp-grid">
+              <div class="pp-card">
+                <span class="pp-pill green">Active Plan</span>
+                <h2>Growth Content Plan</h2>
+                <div class="pp-price">$697/mo</div>
+                <div class="pp-grid pp-grid-3">
+                  <div class="pp-stat">
+                    <span>Total Leads</span><strong id="ppStatLeads">0</strong>
+                  </div>
+                  <div class="pp-stat">
+                    <span>Posts This Month</span
+                    ><strong id="ppStatPosts">0</strong>
+                  </div>
+                  <div class="pp-stat">
+                    <span>Sessions</span><strong id="ppStatSessions">0</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="pp-card">
+                <h2 style="margin-top: 0">Posting Reminders</h2>
+                <p style="color: #64748b; margin: 0 0 14px">
+                  When to post, set by your content strategy team.
+                </p>
+                <div id="ppReminders"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="owner-performance" class="pp-screen pp-hidden">
+          <div class="pp-card" style="margin-bottom: 22px">
+            <div class="pp-grid pp-grid-3">
+              <div class="pp-stat">
+                <span>Posts This Month</span><strong id="ppPerfPosts">0</strong>
+              </div>
+              <div class="pp-stat">
+                <span>Videographer Sessions</span
+                ><strong id="ppPerfSessions">0</strong>
+              </div>
+              <div class="pp-stat">
+                <span>Leads (ManyChat)</span><strong id="ppPerfLeads">0</strong>
+              </div>
+            </div>
+          </div>
+          <div class="pp-card">
+            <h2 style="margin-top: 0">This Week's Posting</h2>
+            <p style="color: #64748b; margin: 0 0 6px">
+              Counts update automatically from the proof links you submit.
+            </p>
+            <div class="pp-chart">
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar0" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Mon<br /><span
+                  id="ppBarN0"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar1" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Tue<br /><span
+                  id="ppBarN1"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar2" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Wed<br /><span
+                  id="ppBarN2"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar3" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Thu<br /><span
+                  id="ppBarN3"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar4" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Fri<br /><span
+                  id="ppBarN4"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar5" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Sat<br /><span
+                  id="ppBarN5"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+              <div class="pp-bar-wrap">
+                <div class="pp-bar">
+                  <div id="ppBar6" class="pp-bar-fill" style="height: 0%"></div>
+                </div>
+                Sun<br /><span
+                  id="ppBarN6"
+                  style="color: #94a3b8; font-weight: 700"
+                  >0</span
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="automation-engine" class="pp-screen pp-hidden">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-card">
+              <h2>Automation Engine</h2>
+              <p style="color: #64748b">
+                Connect ManyChat, install your lead flow, and send leads into
+                Plan Posts.
+              </p>
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">1</div>
+                  <div>
+                    <h3>Account Handshake</h3>
+                    <p>Create or connect your ManyChat account.</p>
+                  </div>
+                </div>
+                <button class="pp-btn secondary">Connect ManyChat</button>
+              </div>
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">2</div>
+                  <div>
+                    <h3>Install Lead Flow Machine</h3>
+                    <p>Install your ManyChat template.</p>
+                  </div>
+                </div>
+                <button class="pp-btn">Install Flow</button>
+              </div>
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">3</div>
+                  <div>
+                    <h3>Webhook URL</h3>
+                    <p>Paste this into ManyChat External Request.</p>
+                  </div>
+                </div>
+              </div>
+              <input
+                class="pp-input"
+                value="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?client=exquisite"
+                readonly
+              />
+            </div>
+            <div class="pp-card">
+              <h2>Lead Tracking</h2>
+              <div class="pp-grid pp-grid-3">
+                <div class="pp-stat">
+                  <span>Total Leads</span><strong>128</strong>
+                </div>
+                <div class="pp-stat">
+                  <span>This Month</span><strong>41</strong>
+                </div>
+                <div class="pp-stat">
+                  <span>Latest Lead</span><strong>Today</strong>
+                </div>
+              </div>
+              <br />
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">L</div>
+                  <div>
+                    <h3>New Instagram Lead</h3>
+                    <p>Name, phone, and email captured from DM automation.</p>
+                  </div>
+                </div>
+                <span class="pp-pill green">New</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="owner-schedule" class="pp-screen pp-hidden">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Book a videographer session</h2>
+              <p style="color: #64748b">
+                Pick an open time from your videographer's weekly schedule, then
+                add the details.
+              </p>
+              <label class="pp-label">Booking for</label>
+              <input id="ppShootBusinessLabel" class="pp-input" readonly />
+              <label class="pp-label" for="ppShootSlot">Available time</label>
+              <select id="ppShootSlot" class="pp-input"></select>
+              <label class="pp-label" for="ppShootLocation">Location</label>
+              <input
+                id="ppShootLocation"
+                class="pp-input"
+                placeholder="e.g. Queens, NY"
+              />
+              <label class="pp-label" for="ppShootNotes">Notes</label>
+              <textarea
+                id="ppShootNotes"
+                class="pp-input"
+                style="min-height: 110px"
+                placeholder="Anything the videographer should know."
+              ></textarea>
+              <button
+                id="ppBookBtn"
+                class="pp-btn full"
+                onclick="ppBookShoot()"
+              >
+                Book this session
+              </button>
+            </div>
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Upcoming shoots</h2>
+              <div id="ppOwnerShoots"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="content-library" class="pp-screen pp-hidden">
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Content Library</h2>
+            <p style="color: #64748b; margin-bottom: 0">
+              Your finished, ready-to-post content lives in Edited Content.
+              Scripts show what's being filmed.
+            </p>
+          </div>
+          <br />
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">🎬</div>
+              <div class="pp-folder-body">
+                <h3>Edited Content</h3>
+                <p>Finished, ready-to-post videos from the team.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Edited Content', PP_FOLDER_EDITED)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">📝</div>
+              <div class="pp-folder-body">
+                <h3>Scripts</h3>
+                <p>What we're filming, so you can prep ahead.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Scripts', PP_FOLDER_SCRIPTS)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="proof-section" class="pp-screen pp-hidden">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Submit Proof of Posting</h2>
+              <p style="color: #64748b; margin-top: 0">
+                Posted something? Paste the link here and your stats update
+                automatically.
+              </p>
+              <label class="pp-label" for="ppProofPlatform">Platform</label>
+              <select id="ppProofPlatform" class="pp-input">
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>Facebook</option>
+                <option>YouTube</option>
+                <option>LinkedIn</option>
+              </select>
+              <label class="pp-label" for="ppProofUrl">Post link</label>
+              <input
+                id="ppProofUrl"
+                class="pp-input"
+                placeholder="Paste the published post link"
+              />
+              <button class="pp-btn full" onclick="ppSubmitProof()">
+                Log this post
+              </button>
+            </div>
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Recent Posts</h2>
+              <div id="ppProofList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="marketing-dashboard" class="pp-screen pp-hidden">
+          <div class="pp-hero">
+            <h1>Content Strategy Dashboard</h1>
+            <p>
+              Manage consultation availability, set posting reminders, and
+              handle business content.
+            </p>
+          </div>
+          <br />
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Booked Consultations</h2>
+            <div id="ppConsultList"></div>
+          </div>
+        </section>
+
+        <section id="consult-availability" class="pp-screen pp-hidden">
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Set your consultation availability</h2>
+            <p style="color: #64748b; margin-top: 0">
+              Tap the times your team is open for strategy calls each week.
+              Owners can only book inside these slots.
+            </p>
+            <div id="ppStratSchedule"></div>
+          </div>
+        </section>
+
+        <section id="posting-schedule" class="pp-screen pp-hidden">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Set posting times</h2>
+              <p style="color: #64748b; margin-top: 0">
+                Tell the owner when to post. These appear as reminders on their
+                dashboard.
+              </p>
+              <label class="pp-label" for="ppPostDay">Day</label>
+              <select id="ppPostDay" class="pp-input">
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+                <option value="0">Sunday</option>
+              </select>
+              <label class="pp-label" for="ppPostTime">Time</label>
+              <input id="ppPostTime" class="pp-input" type="time" />
+              <label class="pp-label" for="ppPostPlatform">Platform</label>
+              <select id="ppPostPlatform" class="pp-input">
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>Facebook</option>
+                <option>YouTube</option>
+                <option>LinkedIn</option>
+              </select>
+              <label class="pp-label" for="ppPostLabel">Label (optional)</label>
+              <input
+                id="ppPostLabel"
+                class="pp-input"
+                placeholder="e.g. Maintenance wash reel"
+              />
+              <button class="pp-btn full" onclick="ppAddPosting()">
+                Add posting time
+              </button>
+            </div>
+            <div class="pp-card">
+              <h2 style="margin-top: 0">Posting schedule</h2>
+              <div id="ppPostingList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="mkt-content" class="pp-screen pp-hidden">
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Business Content</h2>
+            <p style="color: #64748b; margin-bottom: 0">
+              Pull raw footage, upload finished videos to Edited Content, and
+              manage scripts.
+            </p>
+          </div>
+          <br />
+          <div class="pp-grid pp-grid-3">
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">🎥</div>
+              <div class="pp-folder-body">
+                <h3>Raw Footage</h3>
+                <p>Source clips from the videographer.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Raw Footage', PP_FOLDER_RAW)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">🎬</div>
+              <div class="pp-folder-body">
+                <h3>Edited Content</h3>
+                <p>Upload finished videos here for the owner.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Edited Content', PP_FOLDER_EDITED)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">📝</div>
+              <div class="pp-folder-body">
+                <h3>Scripts</h3>
+                <p>Shooting scripts for owner and videographer.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Scripts', PP_FOLDER_SCRIPTS)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="uploader-availability" class="pp-screen pp-hidden">
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Set your weekly availability</h2>
+            <p style="color: #64748b; margin-top: 0">
+              Tap the times you can work each day. Owners can only book sessions
+              inside these slots.
+            </p>
+            <div id="ppVidSchedule"></div>
+          </div>
+        </section>
+
+        <section id="uploader-dashboard" class="pp-screen pp-hidden">
+          <div class="pp-hero">
+            <h1>Booked Sessions</h1>
+            <p>
+              Every session owners have booked into your schedule, across all
+              businesses.
+            </p>
+          </div>
+          <br />
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Upcoming Recording Sessions</h2>
+            <div id="ppUploaderShoots"></div>
+          </div>
+        </section>
+
+        <section id="uploader-folders" class="pp-screen pp-hidden">
+          <div class="pp-card">
+            <h2 style="margin-top: 0">Upload Folders</h2>
+            <p style="color: #64748b; margin-bottom: 0">
+              Upload raw footage after a shoot. Check Scripts to see what to
+              film.
+            </p>
+          </div>
+          <br />
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">🎥</div>
+              <div class="pp-folder-body">
+                <h3>Raw Footage</h3>
+                <p>Upload everything you shoot here.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Raw Footage', PP_FOLDER_RAW)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+            <div class="pp-folder-card">
+              <div class="pp-folder-img">📝</div>
+              <div class="pp-folder-body">
+                <h3>Scripts</h3>
+                <p>What to film for each session.</p>
+                <button
+                  class="pp-btn full"
+                  onclick="ppOpenDrivePopup('Scripts', PP_FOLDER_SCRIPTS)"
+                >
+                  Open folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="suggestions" class="pp-screen pp-hidden">
+          <div class="pp-grid pp-grid-2">
+            <div class="pp-card">
+              <h2>Suggest a Feature</h2>
+              <p style="color: #64748b">
+                Tell us what would make Plan Posts better.
+              </p>
+              <input class="pp-input" placeholder="Feature title" /><textarea
+                class="pp-input"
+                style="min-height: 150px"
+                placeholder="Describe your suggestion"
+              ></textarea
+              ><button class="pp-btn">Submit Suggestion</button>
+            </div>
+            <div class="pp-card">
+              <h2>Suggestion Board</h2>
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">💡</div>
+                  <div>
+                    <h3>SMS reminders</h3>
+                    <p>Send text alerts for missed posts.</p>
+                  </div>
+                </div>
+                <span class="pp-pill yellow">Planned</span>
+              </div>
+              <div class="pp-row">
+                <div class="pp-left">
+                  <div class="pp-icon">📈</div>
+                  <div>
+                    <h3>Follower API</h3>
+                    <p>Auto-track follower growth.</p>
+                  </div>
+                </div>
+                <span class="pp-pill">Pending</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="ppMobileNav" class="pp-mobile-nav pp-hidden"></div>
+  <div id="ppToast" class="pp-toast"></div>
+
+  <div id="ppConsultModal" class="pp-modal pp-hidden">
+    <div class="pp-modal-form-card">
+      <h2>Book a strategy consultation</h2>
+      <p style="color: #64748b; margin-top: 0">
+        Pick an open time with the content strategy team.
+      </p>
+      <label class="pp-label" for="ppConsultSlot">Available time</label>
+      <select id="ppConsultSlot" class="pp-input"></select>
+      <label class="pp-label" for="ppConsultNotes"
+        >What would you like to cover?</label
+      >
+      <textarea
+        id="ppConsultNotes"
+        class="pp-input"
+        style="min-height: 110px"
+        placeholder="Goals, questions, campaigns to discuss..."
+      ></textarea>
+      <div style="display: flex; gap: 10px; margin-top: 4px">
+        <button
+          id="ppConsultBookBtn"
+          class="pp-btn full"
+          onclick="ppBookConsult()"
+        >
+          Book consultation
+        </button>
+        <button class="pp-btn secondary" onclick="ppCloseConsult()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ppDriveModal" class="pp-modal pp-hidden">
+    <div class="pp-modal-card">
+      <div class="pp-modal-header">
+        <div>
+          <div class="pp-modal-title" id="ppModalTitle">Drive Folder</div>
+          <div style="color: #64748b; font-size: 13px">
+            Upload or pull content from this folder.
+          </div>
+        </div>
+        <button class="pp-btn secondary" onclick="ppCloseDrivePopup()">
+          Back
+        </button>
+      </div>
+      <iframe id="ppModalFrame" class="pp-modal-frame"></iframe>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    /* ---------- Supabase config ---------- */
+    var PP_SUPABASE_URL = "https://mehuddhwrwjdijmxjyxo.supabase.co";
+    var PP_SUPABASE_ANON_KEY = "sb_publishable_15ydDycLjLuumyN0vlTg1A_U2SiWI47";
+    var ppSupabase = null;
+    var ppSupabaseReady = false;
+
+    /* ---------- Accounts ---------- */
+    var ppUsersFallback = {
+      owner1: {
+        password: "owner123",
+        name: "Exquisite Ventures Owner",
+        role: "Business Owner",
+        businessId: "exquisite",
+        businessName: "Exquisite Ventures",
+        start: "owner-dashboard",
+        nav: [
+          ["owner-dashboard", "\u{1F3E0}", "Home"],
+          ["owner-performance", "\u{1F4CA}", "Stats"],
+          ["automation-engine", "\u2699\uFE0F", "Leads"],
+          ["owner-schedule", "\u{1F4C5}", "Shoot"],
+          ["content-library", "\u{1F4C1}", "Content"],
+          ["proof-section", "\u{1F517}", "Proof"],
+          ["suggestions", "\u{1F4A1}", "Ideas"],
+        ],
+      },
+      marketing1: {
+        password: "marketing123",
+        name: "Content Strategy Team",
+        role: "Content Strategy",
+        businessId: "exquisite",
+        businessName: "Exquisite Ventures",
+        start: "marketing-dashboard",
+        nav: [
+          ["marketing-dashboard", "\u{1F3E0}", "Home"],
+          ["consult-availability", "\u{1F4C5}", "Availability"],
+          ["posting-schedule", "\u23F0", "Reminders"],
+          ["mkt-content", "\u{1F4C1}", "Content"],
+          ["suggestions", "\u{1F4A1}", "Ideas"],
+        ],
+      },
+      uploader1: {
+        password: "uploader123",
+        name: "Content Videographer",
+        role: "Videographer / Uploader",
+        businessId: null,
+        start: "uploader-availability",
+        nav: [
+          ["uploader-availability", "\u{1F4C5}", "Availability"],
+          ["uploader-dashboard", "\u{1F3AC}", "Sessions"],
+          ["uploader-folders", "\u{1F4C1}", "Folders"],
+          ["suggestions", "\u{1F4A1}", "Ideas"],
+        ],
+      },
+    };
+    var ppUsers = {};
+
+    /* Drive folders for Exquisite Ventures (the first test business). Per-business in production. */
+    var PP_FOLDER_EDITED = "194yAHe3yCUtQbU4vuKAdmDFmhB9K6sMa";
+    var PP_FOLDER_RAW = "12eGZC2SVKcLQhz-87FT_L11-rjcwuVtx";
+    var PP_FOLDER_SCRIPTS = "1WGpgmRMHimrqN4OhPW-gEbx6GitgVPM3";
+
+    var PP_SHOOTS_KEY = "planposts:shoots";
+    var PP_CONSULTS_KEY = "planposts:consults";
+    var PP_PROOFS_KEY = "planposts:proofs";
+    var PP_SESSION_KEY = "planposts:session";
+    var PP_SCHED_VID = "planposts:sched:videographer";
+    var PP_SCHED_STRAT = "planposts:sched:strategy";
+    var PP_LEADS_MOCK = 128;
+
+    var PP_MONTHS = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    var PP_DAYNAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var PP_DAYS = [
+      ["Mon", 1],
+      ["Tue", 2],
+      ["Wed", 3],
+      ["Thu", 4],
+      ["Fri", 5],
+      ["Sat", 6],
+      ["Sun", 0],
+    ];
+    var PP_SLOT_TIMES = [];
+    for (var _h = 8; _h <= 19; _h++) {
+      PP_SLOT_TIMES.push((_h < 10 ? "0" : "") + _h + ":00");
+    }
+
+    var ppCurrentUser = null;
+
+    /* ---------- Supabase helpers ---------- */
+    function ppUsingPlaceholderSupabase() {
+      return (
+        !PP_SUPABASE_URL ||
+        !PP_SUPABASE_ANON_KEY ||
+        PP_SUPABASE_URL.indexOf("YOUR-PROJECT") >= 0 ||
+        PP_SUPABASE_ANON_KEY.indexOf("YOUR_SUPABASE") >= 0
+      );
+    }
+    function ppClone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+    function ppNavFromRow(navJson, fallbackNav) {
+      if (Array.isArray(navJson)) return navJson;
+      if (typeof navJson === "string") {
+        try {
+          var parsed = JSON.parse(navJson);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
+      }
+      return fallbackNav || [];
+    }
+    function ppUserFromRow(row, fallbackUser) {
+      return {
+        password: String((row && row.password) || ""),
+        name: String((row && row.name) || ""),
+        role: String((row && row.role) || ""),
+        businessId:
+          row && row.business_id != null ? String(row.business_id) : null,
+        businessName:
+          row && row.business_name != null ? String(row.business_name) : "",
+        start: String(
+          (row && row.start_screen) ||
+            (fallbackUser && fallbackUser.start) ||
+            "owner-dashboard",
+        ),
+        nav: ppNavFromRow(
+          row && row.nav_json,
+          fallbackUser && fallbackUser.nav,
+        ),
+      };
+    }
+    async function ppInitSupabase() {
+      if (ppUsingPlaceholderSupabase()) return;
+      try {
+        if (!window.supabase || !window.supabase.createClient) return;
+        ppSupabase = window.supabase.createClient(
+          PP_SUPABASE_URL,
+          PP_SUPABASE_ANON_KEY,
+        );
+        ppSupabaseReady = true;
+      } catch (e) {
+        ppSupabaseReady = false;
+      }
+    }
+    async function ppLoadUsers() {
+      ppUsers = ppClone(ppUsersFallback);
+      if (!ppSupabaseReady) return;
+      try {
+        var res = await ppSupabase
+          .from("pp_users")
+          .select(
+            "username,password,name,role,business_id,business_name,start_screen,nav_json",
+          );
+        if (res.error || !Array.isArray(res.data) || !res.data.length) return;
+        var mapped = {};
+        res.data.forEach(function (row) {
+          var username = String(row.username || "").trim();
+          if (!username) return;
+          mapped[username] = ppUserFromRow(row, ppUsersFallback[username]);
+        });
+        if (Object.keys(mapped).length) ppUsers = mapped;
+      } catch (e) {}
+    }
+
+    /* ---------- Persistence (Supabase first, artifact storage second, in-memory fallback) ---------- */
+    var ppMem = {};
+    async function ppGet(key, fallback) {
+      if (ppSupabaseReady) {
+        try {
+          var dbRes = await ppSupabase
+            .from("pp_app_state")
+            .select("value_json")
+            .eq("key", key)
+            .maybeSingle();
+          if (
+            !dbRes.error &&
+            dbRes.data &&
+            dbRes.data.value_json !== undefined &&
+            dbRes.data.value_json !== null
+          )
+            return dbRes.data.value_json;
+        } catch (e) {}
+      }
+      try {
+        if (window.storage && window.storage.get) {
+          var r = await window.storage.get(key);
+          if (r) return JSON.parse(r.value);
+        }
+      } catch (e) {
+        return key in ppMem ? ppMem[key] : fallback;
+      }
+      return key in ppMem ? ppMem[key] : fallback;
+    }
+    async function ppSet(key, value) {
+      ppMem[key] = value;
+      if (ppSupabaseReady) {
+        try {
+          await ppSupabase.from("pp_app_state").upsert(
+            {
+              key: key,
+              value_json: value,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "key" },
+          );
+        } catch (e) {}
+      }
+      try {
+        if (window.storage && window.storage.set) {
+          await window.storage.set(key, JSON.stringify(value));
+        }
+      } catch (e) {}
+    }
+
+    /* ---------- Helpers ---------- */
+    function ppEsc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    }
+    function ppYMD(d) {
+      return (
+        d.getFullYear() +
+        "-" +
+        String(d.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(d.getDate()).padStart(2, "0")
+      );
+    }
+    function ppTimeLabel(t) {
+      var p = String(t).split(":");
+      var h = parseInt(p[0], 10);
+      var ap = h >= 12 ? "PM" : "AM";
+      var hh = h % 12 || 12;
+      return hh + (p[1] && p[1] !== "00" ? ":" + p[1] : "") + " " + ap;
+    }
+    function ppFmtLong(date, time) {
+      var d = new Date(date + "T" + (time || "00:00"));
+      return (
+        PP_DAYNAMES[d.getDay()] +
+        ", " +
+        PP_MONTHS[d.getMonth()] +
+        " " +
+        d.getDate() +
+        " \u00B7 " +
+        ppTimeLabel(time || "00:00")
+      );
+    }
+    function ppUpcoming(items) {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return items
+        .filter(function (s) {
+          return new Date(s.date + "T" + (s.time || "00:00")) >= today;
+        })
+        .sort(function (a, b) {
+          return (a.date + a.time).localeCompare(b.date + b.time);
+        });
+    }
+    function ppWeekStart() {
+      var d = new Date();
+      var off = (d.getDay() + 6) % 7;
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - off);
+      return d;
+    }
+
+    /* ---------- Auth ---------- */
+    async function ppLogin() {
+      var username = document.getElementById("ppUsername").value.trim();
+      var password = document.getElementById("ppPassword").value.trim();
+      if (!ppUsers[username]) await ppLoadUsers();
+      var user = ppUsers[username];
+      if (!user || user.password !== password) {
+        document.getElementById("ppError").classList.remove("pp-hidden");
+        return;
+      }
+      await ppSet(PP_SESSION_KEY, username);
+      ppEnterApp(username, user);
+    }
+    async function ppEnterApp(username, user) {
+      ppCurrentUser = {
+        username: username,
+        name: user.name,
+        role: user.role,
+        businessId: user.businessId,
+        businessName: user.businessName,
+        start: user.start,
+        nav: user.nav,
+        password: "",
+      };
+      document.getElementById("ppLogin").classList.add("pp-hidden");
+      document.getElementById("ppApp").classList.remove("pp-hidden");
+      document.getElementById("ppMobileNav").classList.remove("pp-hidden");
+      document.getElementById("ppUserName").innerText = user.name;
+      document.getElementById("ppUserRole").innerText = user.role;
+      ppBuildNav(user);
+      ppSetBusinessLabel();
+      await ppRefreshAll();
+      ppShow(user.start);
+    }
+    function ppBuildNav(user) {
+      var nav = document.getElementById("ppNav"),
+        mobile = document.getElementById("ppMobileNav");
+      nav.innerHTML = "";
+      mobile.innerHTML = "";
+      user.nav.forEach(function (item) {
+        var id = item[0],
+          icon = item[1],
+          label = item[2];
+        var btn = document.createElement("button");
+        btn.innerText = icon + " " + label;
+        btn.onclick = function () {
+          ppShow(id);
+        };
+        btn.setAttribute("data-screen", id);
+        nav.appendChild(btn);
+        var mbtn = document.createElement("button");
+        mbtn.innerHTML =
+          '<span class="pp-mobile-icon">' + icon + "</span>" + label;
+        mbtn.onclick = function () {
+          ppShow(id);
+        };
+        mbtn.setAttribute("data-screen", id);
+        mobile.appendChild(mbtn);
+      });
+    }
+    function ppShow(screenId) {
+      document
+        .querySelectorAll("#planposts-app .pp-screen")
+        .forEach(function (s) {
+          s.classList.add("pp-hidden");
+        });
+      var selected = document.getElementById(screenId);
+      if (selected) selected.classList.remove("pp-hidden");
+      document
+        .querySelectorAll(
+          "#planposts-app .pp-nav button,#planposts-app .pp-mobile-nav button",
+        )
+        .forEach(function (b) {
+          b.classList.remove("active");
+        });
+      document
+        .querySelectorAll(
+          '#planposts-app button[data-screen="' + screenId + '"]',
+        )
+        .forEach(function (b) {
+          b.classList.add("active");
+        });
+      var titles = {
+        "owner-dashboard": "Dashboard",
+        "owner-performance": "Stats",
+        "automation-engine": "Lead Automation",
+        "owner-schedule": "Book a Shoot",
+        "content-library": "Content Library",
+        "proof-section": "Proof of Posting",
+        "marketing-dashboard": "Content Strategy",
+        "consult-availability": "Consultation Availability",
+        "posting-schedule": "Posting Reminders",
+        "mkt-content": "Business Content",
+        "uploader-availability": "My Availability",
+        "uploader-dashboard": "Booked Sessions",
+        "uploader-folders": "Upload Folders",
+        suggestions: "Suggestions",
+      };
+      document.getElementById("ppPageTitle").innerText =
+        titles[screenId] || "Dashboard";
+      if (ppCurrentUser) {
+        ppRefreshAll();
+      }
+    }
+    function ppSetBusinessLabel() {
+      var el = document.getElementById("ppShootBusinessLabel");
+      if (el)
+        el.value =
+          (ppCurrentUser && ppCurrentUser.businessName) || "Your business";
+    }
+
+    /* ---------- Weekly availability editor (shared by videographer + strategy) ---------- */
+    async function ppRenderSchedule(key, containerId) {
+      var el = document.getElementById(containerId);
+      if (!el) return;
+      var tpl = await ppGet(key, {});
+      var html = "";
+      PP_DAYS.forEach(function (day) {
+        var name = day[0],
+          wd = day[1];
+        var sel = tpl[wd] || [];
+        html +=
+          '<div class="pp-day"><div class="pp-day-head"><strong>' +
+          name +
+          "</strong>" +
+          (sel.length
+            ? '<span class="pp-pill green">' +
+              sel.length +
+              " slot" +
+              (sel.length > 1 ? "s" : "") +
+              "</span>"
+            : '<span class="pp-pill">Off</span>') +
+          '</div><div class="pp-chips">';
+        PP_SLOT_TIMES.forEach(function (t) {
+          var on = sel.indexOf(t) >= 0;
+          html +=
+            '<span class="pp-chip' +
+            (on ? " on" : "") +
+            '" onclick="ppToggleSlot(\'' +
+            key +
+            "'," +
+            wd +
+            ",'" +
+            t +
+            "')\">" +
+            ppEsc(ppTimeLabel(t)) +
+            "</span>";
+        });
+        html += "</div></div>";
+      });
+      el.innerHTML = html;
+    }
+    async function ppToggleSlot(key, wd, t) {
+      var tpl = await ppGet(key, {});
+      var arr = tpl[wd] || [];
+      var i = arr.indexOf(t);
+      if (i >= 0) arr.splice(i, 1);
+      else arr.push(t);
+      tpl[wd] = arr;
+      await ppSet(key, tpl);
+      await ppRefreshAll();
+    }
+    async function ppGenOpenSlots(schedKey, bookings) {
+      var tpl = await ppGet(schedKey, {});
+      var booked = {};
+      bookings.forEach(function (b) {
+        booked[b.date + " " + b.time] = 1;
+      });
+      var now = new Date();
+      var out = [];
+      for (var i = 0; i < 21; i++) {
+        var d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() + i);
+        var times = (tpl[d.getDay()] || []).slice().sort();
+        var ds = ppYMD(d);
+        times.forEach(function (t) {
+          var dt = new Date(ds + "T" + t);
+          if (dt >= now && !booked[ds + " " + t])
+            out.push({ date: ds, time: t });
+        });
+      }
+      out.sort(function (a, b) {
+        return (a.date + a.time).localeCompare(b.date + b.time);
+      });
+      return out;
+    }
+
+    /* ---------- Calendar export ---------- */
+    function ppGcalStamp(date, time, addMin) {
+      var d = new Date(date + "T" + (time || "09:00"));
+      if (addMin) d.setMinutes(d.getMinutes() + addMin);
+      return d
+        .toISOString()
+        .replace(/[-:]/g, "")
+        .replace(/\.\d{3}Z$/, "Z");
+    }
+    function ppGcalUrl(title, date, time, location, notes) {
+      var start = ppGcalStamp(date, time, 0),
+        end = ppGcalStamp(date, time, 120);
+      var params = new URLSearchParams({
+        action: "TEMPLATE",
+        text: title,
+        dates: start + "/" + end,
+        details: notes || "",
+        location: location || "",
+      });
+      return "https://calendar.google.com/calendar/render?" + params.toString();
+    }
+    function ppGcalLink(s) {
+      return ppGcalUrl(
+        "Content shoot \u2014 " + (s.businessName || ""),
+        s.date,
+        s.time,
+        s.location,
+        s.notes,
+      );
+    }
+    function ppGcalConsult(c) {
+      return ppGcalUrl(
+        "Strategy consultation \u2014 " + (c.businessName || ""),
+        c.date,
+        c.time,
+        "",
+        c.notes,
+      );
+    }
+    async function ppDownloadIcs(id) {
+      var all = await ppGet(PP_SHOOTS_KEY, []);
+      var s = null;
+      all.forEach(function (x) {
+        if (x.id === id) s = x;
+      });
+      if (!s) return;
+      var now = new Date();
+      var start = ppGcalStamp(s.date, s.time, 0),
+        end = ppGcalStamp(s.date, s.time, 120),
+        stamp = ppGcalStamp(
+          ppYMD(now),
+          String(now.getHours()).padStart(2, "0") +
+            ":" +
+            String(now.getMinutes()).padStart(2, "0"),
+          0,
+        );
+      var ics = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Plan Posts//EN",
+        "BEGIN:VEVENT",
+        "UID:" + s.id + "@planposts",
+        "DTSTAMP:" + stamp,
+        "DTSTART:" + start,
+        "DTEND:" + end,
+        "SUMMARY:Content shoot \u2014 " + (s.businessName || ""),
+        "LOCATION:" + (s.location || ""),
+        "DESCRIPTION:" + (s.notes || "").replace(/\n/g, " "),
+        "END:VEVENT",
+        "END:VCALENDAR",
+      ].join("\r\n");
+      var blob = new Blob([ics], { type: "text/calendar" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "shoot-" + s.date + ".ics";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    /* ---------- Rows ---------- */
+    function ppShootRow(s, opts) {
+      var d = new Date(s.date + "T" + (s.time || "00:00"));
+      var detail = s.location ? s.location : "Location TBD";
+      var ctx =
+        opts && opts.showBusiness
+          ? '<p style="margin:2px 0 0;color:#94a3b8;font-size:13px">' +
+            ppEsc(s.businessName) +
+            "</p>"
+          : "";
+      return (
+        '<div class="pp-shoot-row"><div class="pp-shoot-meta"><div class="pp-shoot-date"><span class="d">' +
+        d.getDate() +
+        '</span><span class="m">' +
+        PP_MONTHS[d.getMonth()] +
+        '</span></div><div><h3 style="margin:0;font-size:16px">Content shoot</h3><p style="margin:4px 0 0;color:#64748b;font-size:14px">' +
+        ppEsc(ppFmtLong(s.date, s.time)) +
+        '</p><p style="margin:2px 0 0;color:#94a3b8;font-size:13px">' +
+        ppEsc(detail) +
+        "</p>" +
+        ctx +
+        '</div></div><div class="pp-cal-btns"><a class="pp-btn small" href="' +
+        ppGcalLink(s) +
+        '" target="_blank" rel="noopener">Add to Google Calendar</a><button class="pp-btn small secondary" onclick="ppDownloadIcs(\'' +
+        s.id +
+        "')\">.ics</button>" +
+        (opts && opts.canDelete
+          ? '<button class="pp-btn small secondary" onclick="ppDeleteShoot(\'' +
+            s.id +
+            '\')" style="color:#dc2626;border-color:#fecaca">Cancel</button>'
+          : "") +
+        "</div></div>"
+      );
+    }
+    function ppConsultRow(c, opts) {
+      var d = new Date(c.date + "T" + (c.time || "00:00"));
+      var ctx =
+        opts && opts.showBusiness
+          ? '<p style="margin:2px 0 0;color:#94a3b8;font-size:13px">' +
+            ppEsc(c.businessName) +
+            "</p>"
+          : "";
+      var notes =
+        opts && opts.notes && c.notes
+          ? '<p style="margin:2px 0 0;color:#94a3b8;font-size:13px">\u201C' +
+            ppEsc(c.notes) +
+            "\u201D</p>"
+          : "";
+      return (
+        '<div class="pp-shoot-row"><div class="pp-shoot-meta"><div class="pp-shoot-date"><span class="d">' +
+        d.getDate() +
+        '</span><span class="m">' +
+        PP_MONTHS[d.getMonth()] +
+        '</span></div><div><h3 style="margin:0;font-size:16px">Strategy consultation</h3><p style="margin:4px 0 0;color:#64748b;font-size:14px">' +
+        ppEsc(ppFmtLong(c.date, c.time)) +
+        "</p>" +
+        ctx +
+        notes +
+        '</div></div><div class="pp-cal-btns"><a class="pp-btn small" href="' +
+        ppGcalConsult(c) +
+        '" target="_blank" rel="noopener">Add to Google Calendar</a>' +
+        (opts && opts.canCancel
+          ? '<button class="pp-btn small secondary" onclick="ppCancelConsult(\'' +
+            c.id +
+            '\')" style="color:#dc2626;border-color:#fecaca">Cancel</button>'
+          : "") +
+        "</div></div>"
+      );
+    }
+
+    /* ---------- Shoot booking ---------- */
+    async function ppRenderShootSlots() {
+      var sel = document.getElementById("ppShootSlot");
+      if (!sel) return;
+      var btn = document.getElementById("ppBookBtn");
+      var shoots = await ppGet(PP_SHOOTS_KEY, []);
+      var slots = await ppGenOpenSlots(PP_SCHED_VID, shoots);
+      if (!slots.length) {
+        sel.innerHTML =
+          '<option value="">No open times \u2014 videographer has not set availability</option>';
+        if (btn) btn.disabled = true;
+        return;
+      }
+      if (btn) btn.disabled = false;
+      sel.innerHTML = slots
+        .map(function (s) {
+          return (
+            '<option value="' +
+            s.date +
+            "|" +
+            s.time +
+            '">' +
+            ppEsc(ppFmtLong(s.date, s.time)) +
+            "</option>"
+          );
+        })
+        .join("");
+    }
+    async function ppBookShoot() {
+      var v = document.getElementById("ppShootSlot").value;
+      if (!v) {
+        ppToast("Pick an open time first.");
+        return;
+      }
+      var parts = v.split("|"),
+        date = parts[0],
+        time = parts[1];
+      var location = document.getElementById("ppShootLocation").value.trim();
+      var notes = document.getElementById("ppShootNotes").value.trim();
+      var shoots = await ppGet(PP_SHOOTS_KEY, []);
+      if (
+        shoots.some(function (s) {
+          return s.date === date && s.time === time;
+        })
+      ) {
+        ppToast("That time was just taken. Pick another.");
+        await ppRefreshAll();
+        return;
+      }
+      shoots.push({
+        id: "s_" + Date.now(),
+        date: date,
+        time: time,
+        businessId: ppCurrentUser.businessId,
+        businessName: ppCurrentUser.businessName,
+        location: location,
+        notes: notes,
+        createdAt: new Date().toISOString(),
+      });
+      await ppSet(PP_SHOOTS_KEY, shoots);
+      document.getElementById("ppShootLocation").value = "";
+      document.getElementById("ppShootNotes").value = "";
+      await ppRefreshAll();
+      ppToast("Session booked.");
+    }
+    async function ppDeleteShoot(id) {
+      var shoots = await ppGet(PP_SHOOTS_KEY, []);
+      await ppSet(
+        PP_SHOOTS_KEY,
+        shoots.filter(function (s) {
+          return s.id !== id;
+        }),
+      );
+      await ppRefreshAll();
+      ppToast("Booking cancelled.");
+    }
+    async function ppRenderOwnerShoots() {
+      var el = document.getElementById("ppOwnerShoots");
+      if (!el) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) {
+        el.innerHTML = "";
+        return;
+      }
+      var all = await ppGet(PP_SHOOTS_KEY, []);
+      var list = ppUpcoming(all).filter(function (s) {
+        return s.businessId === ppCurrentUser.businessId;
+      });
+      el.innerHTML = list.length
+        ? list
+            .map(function (s) {
+              return ppShootRow(s, { canDelete: true });
+            })
+            .join("")
+        : '<div class="pp-empty"><strong>No shoots booked yet</strong>Pick an open time to book your first session.</div>';
+    }
+    async function ppRenderUploaderShoots() {
+      var el = document.getElementById("ppUploaderShoots");
+      if (!el) return;
+      var list = ppUpcoming(await ppGet(PP_SHOOTS_KEY, []));
+      el.innerHTML = list.length
+        ? list
+            .map(function (s) {
+              return ppShootRow(s, { showBusiness: true });
+            })
+            .join("")
+        : '<div class="pp-empty"><strong>No recording sessions scheduled</strong>Sessions booked by owners will appear here.</div>';
+    }
+    async function ppRenderQuota() {
+      var used = document.getElementById("ppQuotaUsed");
+      if (!used) return;
+      var all = await ppGet(PP_SHOOTS_KEY, []);
+      var bizId = ppCurrentUser && ppCurrentUser.businessId;
+      var total = 4;
+      var now = new Date();
+      var ym =
+        now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+      var count = all.filter(function (s) {
+        return s.businessId === bizId && s.date.slice(0, 7) === ym;
+      }).length;
+      var left = Math.max(0, total - count);
+      used.innerText = count;
+      document.getElementById("ppQuotaFill").style.width =
+        Math.min(100, (count / total) * 100) + "%";
+      document.getElementById("ppQuotaUsedLine").innerText =
+        count + (count === 1 ? " session used" : " sessions used");
+      document.getElementById("ppQuotaLeftLine").innerText =
+        left + (left === 1 ? " session remaining" : " sessions remaining");
+    }
+
+    /* ---------- Consultations ---------- */
+    async function ppRenderConsultSlots() {
+      var sel = document.getElementById("ppConsultSlot");
+      if (!sel) return;
+      var btn = document.getElementById("ppConsultBookBtn");
+      var consults = await ppGet(PP_CONSULTS_KEY, []);
+      var slots = await ppGenOpenSlots(PP_SCHED_STRAT, consults);
+      if (!slots.length) {
+        sel.innerHTML =
+          '<option value="">No open times \u2014 strategy team has not set availability</option>';
+        if (btn) btn.disabled = true;
+        return;
+      }
+      if (btn) btn.disabled = false;
+      sel.innerHTML = slots
+        .map(function (s) {
+          return (
+            '<option value="' +
+            s.date +
+            "|" +
+            s.time +
+            '">' +
+            ppEsc(ppFmtLong(s.date, s.time)) +
+            "</option>"
+          );
+        })
+        .join("");
+    }
+    async function ppOpenConsult() {
+      await ppRenderConsultSlots();
+      document.getElementById("ppConsultModal").classList.remove("pp-hidden");
+    }
+    function ppCloseConsult() {
+      document.getElementById("ppConsultModal").classList.add("pp-hidden");
+    }
+    async function ppBookConsult() {
+      var v = document.getElementById("ppConsultSlot").value;
+      if (!v) {
+        ppToast("Pick an open time first.");
+        return;
+      }
+      var parts = v.split("|"),
+        date = parts[0],
+        time = parts[1];
+      var notes = document.getElementById("ppConsultNotes").value.trim();
+      var consults = await ppGet(PP_CONSULTS_KEY, []);
+      if (
+        consults.some(function (c) {
+          return c.date === date && c.time === time;
+        })
+      ) {
+        ppToast("That time was just taken. Pick another.");
+        await ppRenderConsultSlots();
+        return;
+      }
+      consults.push({
+        id: "c_" + Date.now(),
+        date: date,
+        time: time,
+        businessId: ppCurrentUser.businessId,
+        businessName: ppCurrentUser.businessName,
+        notes: notes,
+        createdAt: new Date().toISOString(),
+      });
+      await ppSet(PP_CONSULTS_KEY, consults);
+      document.getElementById("ppConsultNotes").value = "";
+      ppCloseConsult();
+      await ppRefreshAll();
+      ppToast("Consultation booked.");
+    }
+    async function ppCancelConsult(id) {
+      var consults = await ppGet(PP_CONSULTS_KEY, []);
+      await ppSet(
+        PP_CONSULTS_KEY,
+        consults.filter(function (c) {
+          return c.id !== id;
+        }),
+      );
+      await ppRefreshAll();
+      ppToast("Consultation cancelled.");
+    }
+    async function ppRenderConsults() {
+      var el = document.getElementById("ppConsultList");
+      if (!el) return;
+      var list = ppUpcoming(await ppGet(PP_CONSULTS_KEY, []));
+      el.innerHTML = list.length
+        ? list
+            .map(function (c) {
+              return ppConsultRow(c, { showBusiness: true, notes: true });
+            })
+            .join("")
+        : '<div class="pp-empty"><strong>No consultations booked</strong>Owner bookings show up here.</div>';
+    }
+    async function ppRenderOwnerConsults() {
+      var el = document.getElementById("ppOwnerConsults");
+      if (!el) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) {
+        el.innerHTML = "";
+        return;
+      }
+      var list = ppUpcoming(
+        (await ppGet(PP_CONSULTS_KEY, [])).filter(function (c) {
+          return c.businessId === ppCurrentUser.businessId;
+        }),
+      );
+      el.innerHTML = list.length
+        ? list
+            .map(function (c) {
+              return ppConsultRow(c, { canCancel: true });
+            })
+            .join("")
+        : "";
+    }
+
+    /* ---------- Posting reminders ---------- */
+    async function ppAddPosting() {
+      var day = document.getElementById("ppPostDay").value;
+      var time = document.getElementById("ppPostTime").value;
+      var platform = document.getElementById("ppPostPlatform").value;
+      var label = document.getElementById("ppPostLabel").value.trim();
+      if (!time) {
+        ppToast("Pick a time first.");
+        return;
+      }
+      var key = "planposts:posting:" + ppCurrentUser.businessId;
+      var list = await ppGet(key, []);
+      list.push({
+        id: "pt_" + Date.now(),
+        day: Number(day),
+        time: time,
+        platform: platform,
+        label: label,
+      });
+      await ppSet(key, list);
+      document.getElementById("ppPostLabel").value = "";
+      await ppRefreshAll();
+      ppToast("Posting time added.");
+    }
+    async function ppRemovePosting(id) {
+      var key = "planposts:posting:" + ppCurrentUser.businessId;
+      var list = await ppGet(key, []);
+      await ppSet(
+        key,
+        list.filter(function (p) {
+          return p.id !== id;
+        }),
+      );
+      await ppRefreshAll();
+      ppToast("Posting time removed.");
+    }
+    async function ppRenderPosting() {
+      var el = document.getElementById("ppPostingList");
+      if (!el) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) {
+        el.innerHTML = "";
+        return;
+      }
+      var key = "planposts:posting:" + ppCurrentUser.businessId;
+      var list = (await ppGet(key, [])).slice().sort(function (a, b) {
+        return a.day - b.day || a.time.localeCompare(b.time);
+      });
+      if (!list.length) {
+        el.innerHTML =
+          '<div class="pp-empty"><strong>No posting times set</strong>Add times so the owner gets reminders.</div>';
+        return;
+      }
+      el.innerHTML = list
+        .map(function (p) {
+          return (
+            '<div class="pp-row"><div class="pp-left"><div class="pp-icon">' +
+            ppEsc((p.platform || "?").slice(0, 2).toUpperCase()) +
+            "</div><div><h3>" +
+            ppEsc(PP_DAYNAMES[p.day]) +
+            " \u00B7 " +
+            ppEsc(ppTimeLabel(p.time)) +
+            "</h3><p>" +
+            ppEsc(p.platform || "") +
+            (p.label ? " \u00B7 " + ppEsc(p.label) : "") +
+            '</p></div></div><button class="pp-btn small secondary" onclick="ppRemovePosting(\'' +
+            p.id +
+            '\')" style="color:#dc2626;border-color:#fecaca">Remove</button></div>'
+          );
+        })
+        .join("");
+    }
+    async function ppGenReminders(businessId) {
+      var list = await ppGet("planposts:posting:" + businessId, []);
+      var out = [];
+      for (var i = 0; i < 7; i++) {
+        var d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() + i);
+        var wd = d.getDay();
+        var ds = ppYMD(d);
+        list
+          .filter(function (p) {
+            return Number(p.day) === wd;
+          })
+          .forEach(function (p) {
+            out.push({
+              date: ds,
+              time: p.time,
+              platform: p.platform,
+              label: p.label,
+              today: i === 0,
+            });
+          });
+      }
+      out.sort(function (a, b) {
+        return (a.date + a.time).localeCompare(b.date + b.time);
+      });
+      return out;
+    }
+    async function ppRenderReminders() {
+      var el = document.getElementById("ppReminders");
+      if (!el) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) {
+        el.innerHTML = "";
+        return;
+      }
+      var rem = await ppGenReminders(ppCurrentUser.businessId);
+      if (!rem.length) {
+        el.innerHTML =
+          '<div class="pp-empty"><strong>No posting times yet</strong>Your content strategy team will set these.</div>';
+        return;
+      }
+      el.innerHTML = rem
+        .slice(0, 8)
+        .map(function (r) {
+          var d = new Date(r.date + "T" + r.time);
+          var when =
+            (r.today ? "Today" : PP_DAYNAMES[d.getDay()]) +
+            " \u00B7 " +
+            ppTimeLabel(r.time);
+          return (
+            '<div class="pp-row"><div class="pp-left"><div class="pp-icon">' +
+            ppEsc((r.platform || "?").slice(0, 2).toUpperCase()) +
+            "</div><div><h3>" +
+            ppEsc(r.platform || "Post") +
+            (r.label ? " \u00B7 " + ppEsc(r.label) : "") +
+            "</h3><p>" +
+            ppEsc(when) +
+            "</p></div></div>" +
+            (r.today
+              ? '<span class="pp-pill red">Post today</span>'
+              : '<span class="pp-pill">Upcoming</span>') +
+            "</div>"
+          );
+        })
+        .join("");
+    }
+
+    /* ---------- Proof of posting ---------- */
+    async function ppSubmitProof() {
+      var platform = document.getElementById("ppProofPlatform").value;
+      var url = document.getElementById("ppProofUrl").value.trim();
+      if (!url) {
+        ppToast("Paste a post link first.");
+        return;
+      }
+      var proofs = await ppGet(PP_PROOFS_KEY, []);
+      proofs.push({
+        id: "pr_" + Date.now(),
+        businessId: ppCurrentUser.businessId,
+        platform: platform,
+        url: url,
+        postedAt: new Date().toISOString(),
+      });
+      await ppSet(PP_PROOFS_KEY, proofs);
+      document.getElementById("ppProofUrl").value = "";
+      await ppRefreshAll();
+      ppToast("Post logged.");
+    }
+    async function ppRenderProofList() {
+      var el = document.getElementById("ppProofList");
+      if (!el) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) {
+        el.innerHTML = "";
+        return;
+      }
+      var proofs = (await ppGet(PP_PROOFS_KEY, []))
+        .filter(function (p) {
+          return p.businessId === ppCurrentUser.businessId;
+        })
+        .slice()
+        .reverse();
+      if (!proofs.length) {
+        el.innerHTML =
+          '<div class="pp-empty"><strong>No posts logged yet</strong>Paste a post link to start tracking.</div>';
+        return;
+      }
+      el.innerHTML = proofs
+        .slice(0, 12)
+        .map(function (p) {
+          var d = new Date(p.postedAt);
+          return (
+            '<div class="pp-row"><div class="pp-left"><div class="pp-icon">' +
+            ppEsc((p.platform || "?").slice(0, 2).toUpperCase()) +
+            "</div><div><h3>" +
+            ppEsc(p.platform || "Post") +
+            '</h3><p><a href="' +
+            ppEsc(p.url) +
+            '" target="_blank" rel="noopener" style="color:#2f80ff;text-decoration:none;word-break:break-all">' +
+            ppEsc(p.url) +
+            '</a></p></div></div><span class="pp-pill green">' +
+            (d.getMonth() + 1) +
+            "/" +
+            d.getDate() +
+            "</span></div>"
+          );
+        })
+        .join("");
+    }
+
+    /* ---------- Stats ---------- */
+    async function ppRenderStats() {
+      var home = document.getElementById("ppStatPosts");
+      var perf = document.getElementById("ppPerfPosts");
+      if (!home && !perf) return;
+      if (!ppCurrentUser || !ppCurrentUser.businessId) return;
+      var bizId = ppCurrentUser.businessId;
+      var now = new Date();
+      var ym =
+        now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+      var proofs = (await ppGet(PP_PROOFS_KEY, [])).filter(function (p) {
+        return p.businessId === bizId;
+      });
+      var shoots = (await ppGet(PP_SHOOTS_KEY, [])).filter(function (s) {
+        return s.businessId === bizId;
+      });
+      var postsMonth = proofs.filter(function (p) {
+        return (p.postedAt || "").slice(0, 7) === ym;
+      }).length;
+      var sessionsMonth = shoots.filter(function (s) {
+        return s.date.slice(0, 7) === ym;
+      }).length;
+      if (home) {
+        document.getElementById("ppStatLeads").innerText = PP_LEADS_MOCK;
+        document.getElementById("ppStatPosts").innerText = postsMonth;
+        document.getElementById("ppStatSessions").innerText = sessionsMonth;
+      }
+      if (perf) {
+        document.getElementById("ppPerfLeads").innerText = PP_LEADS_MOCK;
+        document.getElementById("ppPerfPosts").innerText = postsMonth;
+        document.getElementById("ppPerfSessions").innerText = sessionsMonth;
+        var ws = ppWeekStart();
+        var counts = [0, 0, 0, 0, 0, 0, 0];
+        proofs.forEach(function (p) {
+          var d = new Date(p.postedAt);
+          var diff = Math.floor((d - ws) / 86400000);
+          if (diff >= 0 && diff < 7) counts[diff]++;
+        });
+        var max = Math.max(1, Math.max.apply(null, counts));
+        for (var i = 0; i < 7; i++) {
+          var bar = document.getElementById("ppBar" + i);
+          if (bar) bar.style.height = (counts[i] / max) * 100 + "%";
+          var n = document.getElementById("ppBarN" + i);
+          if (n) n.innerText = counts[i];
+        }
+      }
+    }
+
+    /* ---------- Refresh ---------- */
+    async function ppRefreshAll() {
+      await ppRenderSchedule(PP_SCHED_VID, "ppVidSchedule");
+      await ppRenderSchedule(PP_SCHED_STRAT, "ppStratSchedule");
+      await ppRenderShootSlots();
+      await ppRenderOwnerShoots();
+      await ppRenderUploaderShoots();
+      await ppRenderConsults();
+      await ppRenderOwnerConsults();
+      await ppRenderPosting();
+      await ppRenderReminders();
+      await ppRenderProofList();
+      await ppRenderStats();
+      await ppRenderQuota();
+    }
+
+    /* ---------- Drive popup ---------- */
+    function ppOpenDrivePopup(title, folderId) {
+      document.getElementById("ppModalTitle").innerText = title;
+      document.getElementById("ppModalFrame").src =
+        "https://drive.google.com/embeddedfolderview?id=" + folderId + "#grid";
+      document.getElementById("ppDriveModal").classList.remove("pp-hidden");
+    }
+    function ppCloseDrivePopup() {
+      document.getElementById("ppDriveModal").classList.add("pp-hidden");
+      document.getElementById("ppModalFrame").src = "";
+    }
+
+    /* ---------- Misc ---------- */
+    var ppToastTimer = null;
+    function ppToast(msg) {
+      var t = document.getElementById("ppToast");
+      t.innerText = msg;
+      t.classList.add("show");
+      clearTimeout(ppToastTimer);
+      ppToastTimer = setTimeout(function () {
+        t.classList.remove("show");
+      }, 2200);
+    }
+    async function ppLogout() {
+      await ppSet(PP_SESSION_KEY, null);
+      ppCurrentUser = null;
+      document.getElementById("ppLogin").classList.remove("pp-hidden");
+      document.getElementById("ppApp").classList.add("pp-hidden");
+      document.getElementById("ppMobileNav").classList.add("pp-hidden");
+      document.getElementById("ppUsername").value = "";
+      document.getElementById("ppPassword").value = "";
+      document.getElementById("ppError").classList.add("pp-hidden");
+      ppCloseDrivePopup();
+      ppCloseConsult();
+    }
+
+    (async function ppInit() {
+      await ppInitSupabase();
+      await ppLoadUsers();
+      var username = await ppGet(PP_SESSION_KEY, null);
+      if (username && ppUsers[username])
+        ppEnterApp(username, ppUsers[username]);
+    })();
+  </script>
+</div>
