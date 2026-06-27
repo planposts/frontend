@@ -1691,31 +1691,39 @@
       await ppRefreshAll();
       ppShow(user.start);
     }
-    function ppBuildNav(user) {
-      var nav = document.getElementById("ppNav"),
-        mobile = document.getElementById("ppMobileNav");
-      nav.innerHTML = "";
-      mobile.innerHTML = "";
-      user.nav.forEach(function (item) {
-        var id = item[0],
-          icon = item[1],
-          label = item[2];
-        var btn = document.createElement("button");
-        btn.innerText = icon + " " + label;
-        btn.onclick = function () {
-          ppShow(id);
-        };
-        btn.setAttribute("data-screen", id);
-        nav.appendChild(btn);
-        var mbtn = document.createElement("button");
-        mbtn.innerHTML =
-          '<span class="pp-mobile-icon">' + icon + "</span>" + label;
-        mbtn.onclick = function () {
-          ppShow(id);
-        };
-        mbtn.setAttribute("data-screen", id);
-        mobile.appendChild(mbtn);
-      });
+function ppBuildNav(user) {
+  var nav = document.getElementById("ppNav"),
+    mobile = document.getElementById("ppMobileNav");
+  nav.innerHTML = "";
+  mobile.innerHTML = "";
+  user.nav.forEach(function (item) {
+    var id = item[0],
+      icon = item[1],
+      label = item[2];
+    var btn = document.createElement("button");
+    btn.innerText = icon + " " + label;
+    btn.onclick = function () {
+      ppShow(id);
+    };
+    btn.setAttribute("data-screen", id);
+    nav.appendChild(btn);
+    var mbtn = document.createElement("button");
+    mbtn.innerHTML =
+      '<span class="pp-mobile-icon">' + icon + "</span>" + label;
+    mbtn.onclick = function () {
+      ppShow(id);
+    };
+    mbtn.setAttribute("data-screen", id);
+    mobile.appendChild(mbtn);
+  });
+  var logoutBtn = document.createElement("button");
+  logoutBtn.innerHTML =
+    '<span class="pp-mobile-icon">\u{1F6AA}</span>Logout';
+  logoutBtn.onclick = function () {
+    ppLogout();
+  };
+  mobile.appendChild(logoutBtn);
+}
     }
     function ppShow(screenId) {
       document
