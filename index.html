@@ -680,7 +680,7 @@
         placeholder="Password"
         type="password"
       />
-      <button class="pp-btn full" onclick="ppLogin()">Login</button>
+      <button class="pp-btn full" onclick="(window.ppLogin?ppLogin().catch(function(e){alert('Login error: '+e.message)}):alert('ppLogin is NOT defined — script did not load'))">Login</button>
       <div id="ppError" class="pp-error pp-hidden">
         Wrong username or password.
       </div>
